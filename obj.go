@@ -207,7 +207,7 @@ func (cc *Conn) getObj(o Obj, t *Table, msgType uint16) ([]Obj, error) {
 		return nil, fmt.Errorf("SendMessages: %v", err)
 	}
 
-	reply, err := receiveAckAware(conn, message.Header.Flags)
+	reply, err := receiveIgnoreNewGen(conn, message.Header.Flags)
 	if err != nil {
 		return nil, fmt.Errorf("Receive: %v", err)
 	}

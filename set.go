@@ -800,7 +800,7 @@ func (cc *Conn) GetSets(t *Table) ([]*Set, error) {
 		return nil, fmt.Errorf("SendMessages: %v", err)
 	}
 
-	reply, err := receiveAckAware(conn, message.Header.Flags)
+	reply, err := receiveIgnoreNewGen(conn, message.Header.Flags)
 	if err != nil {
 		return nil, fmt.Errorf("Receive: %v", err)
 	}
@@ -845,7 +845,7 @@ func (cc *Conn) GetSetByName(t *Table, name string) (*Set, error) {
 		return nil, fmt.Errorf("SendMessages: %w", err)
 	}
 
-	reply, err := receiveAckAware(conn, message.Header.Flags)
+	reply, err := receiveIgnoreNewGen(conn, message.Header.Flags)
 	if err != nil {
 		return nil, fmt.Errorf("Receive: %w", err)
 	}
@@ -890,7 +890,7 @@ func (cc *Conn) GetSetElements(s *Set) ([]SetElement, error) {
 		return nil, fmt.Errorf("SendMessages: %v", err)
 	}
 
-	reply, err := receiveAckAware(conn, message.Header.Flags)
+	reply, err := receiveIgnoreNewGen(conn, message.Header.Flags)
 	if err != nil {
 		return nil, fmt.Errorf("Receive: %v", err)
 	}

@@ -132,6 +132,23 @@ func (cc *Conn) netlinkConnUnderLock() (*netlink.Conn, netlinkCloser, error) {
 	return nlconn, func() error { return nlconn.Close() }, nil
 }
 
+func receiveIgnoreNewGen(nlconn *netlink.Conn, sentMsgFlags netlink.HeaderFlags) ([]netlink.Message, error) {
+	msgs, err := receiveAckAware(nlconn, sentMsgFlags)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(msgs) == 0 {
+		return msgs, nil
+	}
+
+	if len(msgs) == 1 && msgs[0].Header.Type == unix.NFT_MSG_NEWGEN {
+		return receiveIgnoreNewGen(nlconn, sentMsgFlags)
+	}
+
+	return msgs, nil
+}
+
 func receiveAckAware(nlconn *netlink.Conn, sentMsgFlags netlink.HeaderFlags) ([]netlink.Message, error) {
 	if nlconn == nil {
 		return nil, errors.New("netlink conn is not initialized")
