@@ -142,7 +142,7 @@ func receiveIgnoreNewGen(nlconn *netlink.Conn, sentMsgFlags netlink.HeaderFlags)
 		return msgs, nil
 	}
 
-	if len(msgs) == 1 && msgs[0].Header.Type == unix.NFT_MSG_NEWGEN {
+	if len(msgs) == 1 && msgs[0].Header.Type == (unix.NFNL_SUBSYS_NFTABLES<<8)|unix.NFT_MSG_NEWGEN {
 		return receiveIgnoreNewGen(nlconn, sentMsgFlags)
 	}
 
